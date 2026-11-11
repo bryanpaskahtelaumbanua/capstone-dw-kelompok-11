@@ -1,7 +1,8 @@
 {
   "metrik": {
     "pasangan_rekonsiliasi": 4,
-    "periode_beririsan": 0
+    "periode_beririsan": 0,
+    "rilis_dibaca": 126
   },
   "seed": 0,
   "data_hash": "56ae001b3cc5d23542383f99e52b63b5c5ad78d379edb030a09adcf4ca3bbb76",
