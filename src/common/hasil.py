@@ -38,7 +38,7 @@ def tulis_hasil(nim, metrik, seed=0, durasi_detik=None, raw=RAW):
            "perangkat": f"{platform.system()} {platform.machine()} Python {platform.python_version()}"}
     if durasi_detik is not None:
         isi["durasi_detik"] = round(float(durasi_detik), 2)
-    tujuan = ROOT / "results" / str(nim) / "metrics.json"
+    tujuan = ROOT / "results" / str(124450003) / "metrics.json"
     tujuan.parent.mkdir(parents=True, exist_ok=True)
     tujuan.write_text(json.dumps(isi, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return tujuan
