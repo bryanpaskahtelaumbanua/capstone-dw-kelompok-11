@@ -1,6 +1,7 @@
 {
   "metrik": {
-    "baris_mentah": 2000,
+    "baris_silver": 1939,
+    "sel_kosong_grid": 379,
     "outlier_ditandai": 79
   },
   "seed": 0,
