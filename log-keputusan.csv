@@ -1,2 +1,2 @@
 id,tanggal,nim,tahap,seri_kode,keputusan,alternatif_ditolak,alasan,dampak_baris
-K-001,2026-11-03,12345678,silver,var543,"periode bulanan Februari/Agustus disimpan sebagai jenis_periode=bulan","rata-rata ke tahunan","sumber menerbitkan dua kali setahun; agregasi dilakukan di Gold",0
+K-001,2026-11-08,124450081,ekstraksi,semua,"Wilayah diseragamkan ke susunan 38 provinsi tahun 2025; provinsi baru menggunakan data sejak tahun berdiri, provinsi induk dibiarkan apa adanya.","Menggabungkan provinsi baru ke provinsi induk dengan bobot penduduk / membuang provinsi baru","Mengikuti aturan baku susunan 38 provinsi BPS tahun 2025 dan digabungkan berdasarkan kode wilayah bukan nama.",0
