@@ -217,7 +217,36 @@ def ambil_berkas_bps_dari_manifest(data_manifest) -> list[str]:
     jelajah(data_manifest)
     return list(dict.fromkeys(hasil))
 
+def berkas_bps_metadata(data_manifest) -> list[str]:
+    """Berkas manifest_asal.json BPS di manifest (catatan unduhan, bukan data)."""
+    return sorted(
+        str(k).replace("\\", "/") for k in data_manifest
+        if isinstance(k, str) and str(k).replace("\\", "/").lower().startswith("bps/")
+        and str(k).lower().endswith("manifest_asal.json")
+    )
 
+
+def _daun_json(x, jalur="$"):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            yield from _daun_json(v, f"{jalur}.{k}")
+    elif isinstance(x, list):
+        for i, v in enumerate(x):
+            yield from _daun_json(v, f"{jalur}[{i}]")
+    else:
+        yield jalur, x
+
+
+def baca_bps_metadata(path_rel: str) -> pd.DataFrame:
+    """Tabel panjang (json_path, nilai) dari catatan unduhan BPS; tidak ada yang disaring."""
+    rel = _rel(path_rel)
+    payload = json.loads(_baca_teks(Path(DATA_RAW) / rel))
+    baris = [{"json_path": j, "nilai": None if v is None else str(v)}
+             for j, v in _daun_json(payload)]
+    if not baris:
+        raise ValueError(f"{rel}: JSON tidak berisi nilai")
+    return _tempel_asal(pd.DataFrame(baris), rel)
+    
 # ---------------------------------------------------------------- uji mandiri
 def uji_periode_dan_manifest():
     global DATA_RAW, sha256_raw
