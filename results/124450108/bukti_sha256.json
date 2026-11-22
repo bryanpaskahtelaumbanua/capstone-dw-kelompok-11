@@ -1,0 +1,95 @@
+{
+  "nim": "124450108",
+  "waktu_utc": "2026-11-22T14:45:03+00:00",
+  "perangkat": "Windows AMD64 Python 3.13.7",
+  "sha256_MANIFEST.csv": "a811fb7f83d25cbde37228b7ec615b18b2aa8a03c27295bc77decf6dcbfcf5f9",
+  "berkas_total": 14,
+  "berkas_cocok": 14,
+  "lolos": true,
+  "rincian": [
+    {
+      "berkas": "bps/2026-10-17/json/sdg8_tpt.json",
+      "sha256_manifest": "fa50f5223f54f49183805551e2078d51e4002a8199bc16398ee58f4b29776654",
+      "sha256_dihitung": "fa50f5223f54f49183805551e2078d51e4002a8199bc16398ee58f4b29776654",
+      "cocok": true
+    },
+    {
+      "berkas": "bps/2026-10-17/manifest_asal.json",
+      "sha256_manifest": "280e6221b880776c9d02a794fba9e79158d90b1fc91c5c85f667acd945025dfe",
+      "sha256_dihitung": "280e6221b880776c9d02a794fba9e79158d90b1fc91c5c85f667acd945025dfe",
+      "cocok": true
+    },
+    {
+      "berkas": "bps/2026-10-17/sdg8_tpt.csv",
+      "sha256_manifest": "9d902bc126481bafd20b4429f7381944ca0ba7e363f08d697fd15149d4c3faa2",
+      "sha256_dihitung": "9d902bc126481bafd20b4429f7381944ca0ba7e363f08d697fd15149d4c3faa2",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/data/DF_SDG_0852_SEX_AGE_RT.csv",
+      "sha256_manifest": "75f10f84e24cfe9e7a885a23c9d8d7e4aa56da82c6f47ac8c0e0a9d8b3b81ce4",
+      "sha256_dihitung": "75f10f84e24cfe9e7a885a23c9d8d7e4aa56da82c6f47ac8c0e0a9d8b3b81ce4",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/data/DF_SDG_0852_SEX_DSB_RT.csv",
+      "sha256_manifest": "130335a771927e70f21770db81760d8a4c4a67812257a800dcc9c06e1a850c4b",
+      "sha256_dihitung": "130335a771927e70f21770db81760d8a4c4a67812257a800dcc9c06e1a850c4b",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/data/DF_UNE_DEAP_SEX_AGE_RT.csv",
+      "sha256_manifest": "5a4c3144d1c15236923d79484c570ca3af8f39b3ba794b94b7da6e0fc9fbc6bc",
+      "sha256_dihitung": "5a4c3144d1c15236923d79484c570ca3af8f39b3ba794b94b7da6e0fc9fbc6bc",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/dsd/SDG_0852_SEX_AGE_RT.json",
+      "sha256_manifest": "2a406d10e4976d9fc4335d538637acdc283cfb3f8517639185bfce967f74b1e8",
+      "sha256_dihitung": "2a406d10e4976d9fc4335d538637acdc283cfb3f8517639185bfce967f74b1e8",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/dsd/SDG_0852_SEX_DSB_RT.json",
+      "sha256_manifest": "6dce1d7c5bd2337d947260e99dc8331adea2317b08faf13cb037a9c9f6d360f5",
+      "sha256_dihitung": "6dce1d7c5bd2337d947260e99dc8331adea2317b08faf13cb037a9c9f6d360f5",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/dsd/UNE_DEAP_SEX_AGE_RT.json",
+      "sha256_manifest": "e1546f4a517a932bdcbdca46012a83c97a90c214be3c6f4a107c3884bfda7001",
+      "sha256_dihitung": "e1546f4a517a932bdcbdca46012a83c97a90c214be3c6f4a107c3884bfda7001",
+      "cocok": true
+    },
+    {
+      "berkas": "ilostat/2026-10-20/metadata/dataflow.json",
+      "sha256_manifest": "af486211b90805142db82ff2654179a6a74904d61380cba2f3fe3f30e7f5aaf9",
+      "sha256_dihitung": "af486211b90805142db82ff2654179a6a74904d61380cba2f3fe3f30e7f5aaf9",
+      "cocok": true
+    },
+    {
+      "berkas": "wdi/2026-10-20/data/kelompok-07-hal-01.json",
+      "sha256_manifest": "9a8729675761d697bd5556d66fd903ed841ee454e7324d41084dc09b9905f912",
+      "sha256_dihitung": "9a8729675761d697bd5556d66fd903ed841ee454e7324d41084dc09b9905f912",
+      "cocok": true
+    },
+    {
+      "berkas": "wdi/2026-10-20/metadata/sumber.json",
+      "sha256_manifest": "eeef380bb10871adf20f17f91669affd60e9e4837571af1120d575fb982a24a9",
+      "sha256_dihitung": "eeef380bb10871adf20f17f91669affd60e9e4837571af1120d575fb982a24a9",
+      "cocok": true
+    },
+    {
+      "berkas": "wdi/2026-10-20/metadata/sumber2_indikator.json",
+      "sha256_manifest": "93874b4575260d1b05cc8996ddbff372e58ea53b69309503136453940076314f",
+      "sha256_dihitung": "93874b4575260d1b05cc8996ddbff372e58ea53b69309503136453940076314f",
+      "cocok": true
+    },
+    {
+      "berkas": "wdi/2026-10-20/metadata/sumber46_indikator.json",
+      "sha256_manifest": "899b4a45ea57fe03286bf8739517a92920970ec096d54051180fa11c71a341d3",
+      "sha256_dihitung": "899b4a45ea57fe03286bf8739517a92920970ec096d54051180fa11c71a341d3",
+      "cocok": true
+    }
+  ]
+}
