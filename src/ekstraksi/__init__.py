@@ -1,60 +1,69 @@
-import pandas as pd
-from pathlib import Path
-from src.common.manifest import RAW, baca
-from src.common.hasil import tulis_hasil
+"""Tahap 1 — Ekstraksi (pertemuan X). Milik tim.
 
-from src.ekstraksi.pembaca_bps import baca_bps_csv, baca_bps_json
-from src.ekstraksi.pembaca_wdi import baca_wdi_json
-from src.ekstraksi.pembaca_ilostat import baca_ilostat_lengkap
+Baca setiap berkas di data/raw/ (CSV, JSON WebAPI BPS, SDMX ILO, JSON WDI) menjadi DataFrame
+mentah yang setia pada sumbernya: tidak ada pembersihan, hanya meratakan struktur dan mencatat
+asal tiap baris (`_berkas_raw`, `_sha256_raw`). Setiap berkas di MANIFEST harus terbaca.
+"""
+import pandas as pd
+
+from src.common.manifest import RAW, baca
+from src.ekstraksi import pembaca_bps as bps
+from src.ekstraksi import pembaca_ilostat as ilo
+from src.ekstraksi import pembaca_wdi as wdi
+
+
+def ekstrak() -> dict:
+    manifest = baca(RAW)
+    laporan, pengamatan, metadata = [], [], []
+
+    def catat(rel, jenis, df, rekaman=None):
+        if len(df):
+            assert df["_berkas_raw"].eq(rel).all(), f"{rel}: _berkas_raw tidak sama dengan path"
+            assert df["_sha256_raw"].notna().all(), f"{rel}: ada _sha256_raw kosong"
+            assert df["_sha256_raw"].eq(manifest[rel]).all(), f"{rel}: sha256 tak cocok dengan MANIFEST"
+            (pengamatan if jenis == "pengamatan" else metadata).append(df)
+        laporan.append({"berkas": rel, "jenis": jenis,
+                        "rekaman": len(df) if rekaman is None else rekaman, "baris": len(df)})
+
+    for b in bps.ambil_berkas_bps_dari_manifest(manifest):
+        catat(b, "pengamatan", bps.baca_bps_csv(b) if b.endswith(".csv") else bps.baca_bps_json(b))
+    for b in bps.berkas_bps_metadata(manifest):
+        catat(b, "metadata", bps.baca_bps_metadata(b))
+    for b in wdi.berkas_wdi_dari_manifest(manifest):
+        df, n = wdi.baca_wdi_berkas(b)
+        catat(b, "pengamatan" if "/data/" in b else "metadata", df, n)
+    for b in ilo.berkas_ilostat(manifest, ".csv", "data"):
+        catat(b, "pengamatan", ilo.baca_ilostat_csv(b))
+    for b in ilo.berkas_ilostat(manifest, ".json"):
+        catat(b, "metadata", ilo.baca_ilostat_json(b))
+
+    # pencocokan dengan MANIFEST: tidak boleh ada yang terlewat atau asing
+    dibaca = {r["berkas"] for r in laporan}
+    terlewat, asing = sorted(set(manifest) - dibaca), sorted(dibaca - set(manifest))
+    if terlewat or asing:
+        raise RuntimeError(f"Berkas manifest terlewat: {terlewat}; berkas di luar manifest: {asing}")
+
+    df = pd.concat(pengamatan, ignore_index=True)
+    metrik = {
+        "berkas_dibaca": len(laporan),
+        "baris_mentah": int(len(df)),                      # hanya pengamatan
+        "baris_metadata": int(sum(len(t) for t in metadata)),
+        "format": 5,   # BPS csv, BPS json, WDI json, ILOSTAT sdmx-csv, ILOSTAT json
+    }
+    return {"pengamatan": df, "laporan": pd.DataFrame(laporan), "metrik": metrik,
+            "n_manifest": len(manifest)}
+
+
+def cetak_laporan(r: dict) -> None:
+    print(r["laporan"].to_string(index=False))
+    m = r["metrik"]
+    print(f"Pencocokan manifest: {m['berkas_dibaca']} dari {r['n_manifest']} berkas terbaca, "
+          f"hash setiap baris sama dengan MANIFEST")
+    print(f"Berkas dibaca: {m['berkas_dibaca']}, baris mentah (pengamatan): {m['baris_mentah']}, "
+          f"baris metadata: {m['baris_metadata']}")
+
 
 def jalankan(hasil_sebelumnya=None):
-    nim = "124450003"
-    manifest_dict = baca(RAW)
-    
-    print("--> Menjalankan pembaca BPS (CSV & JSON)...")
-    df_bps_list = []
-    bps_dir = RAW / "bps"
-    
-    if bps_dir.exists():
-        for p_csv in bps_dir.glob("**/*.csv"):
-            rel_path = str(p_csv.relative_to(RAW)).replace("\\", "/")
-            try:
-                df_c = baca_bps_csv(rel_path)
-                df_bps_list.append(df_c)
-            except Exception as e:
-                print(f"Gagal membaca BPS CSV {rel_path}: {e}")
-                
-        for p_json in bps_dir.glob("**/*.json"):
-            rel_path = str(p_json.relative_to(RAW)).replace("\\", "/")
-            if "manifest_asal.json" in rel_path:
-                continue
-            try:
-                df_j = baca_bps_json(rel_path)
-                df_bps_list.append(df_j)
-            except Exception as e:
-                print(f"Gagal membaca BPS JSON {rel_path}: {e}")
-
-    df_bps = pd.concat(df_bps_list, ignore_index=True) if df_bps_list else pd.DataFrame()
-
-    print("--> Menjalankan pembaca WDI...")
-    df_wdi = baca_wdi_json()
-
-    print("--> Menjalankan pembaca ILOSTAT...")
-    df_ilostat = baca_ilostat_lengkap()
-
-    print("--> Menggabungkan seluruh tabel mentah BPS, WDI, dan ILOSTAT...")
-    df_gabungan = pd.concat([df_bps, df_wdi, df_ilostat], ignore_index=True)
-
-    total_baris_mentah = int(len(df_gabungan))
-    print(f"Berhasil membaca seluruh berkas mentah. Total baris gabungan: {total_baris_mentah}")
-
-    metrik_data = {
-        "baris_masuk": total_baris_mentah,
-        "baris_silver": total_baris_mentah,
-        "keputusan_dicatat": 7
-    }
-
-    tulis_hasil(nim, metrik_data)
-    print(f"Metrik berhasil dicatat ke results/{nim}/metrics.json")
-
-    return df_gabungan
+    r = ekstrak()
+    cetak_laporan(r)
+    return r["pengamatan"]
