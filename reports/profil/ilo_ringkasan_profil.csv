@@ -1,0 +1,4 @@
+seri,baris_mentah,n_deret_rincian,frekuensi,periode_min,obs_kosong,kunci_kembar,baris_identik_penuh,kunci_nilai_berbeda,deret_dengan_celah,total_periode_celah,calon_anomali,calon_bertepatan_patahan
+SDG_0852_SEX_AGE_RT,216,9,A,2000,0,0,0,0,0,0,1,0
+SDG_0852_SEX_DSB_RT,81,9,A,2010,3,0,0,0,9,48,5,0
+UNE_DEAP_SEX_AGE_RT,5424,168,"A,Q",1976,223,0,0,0,167,2946,96,17
