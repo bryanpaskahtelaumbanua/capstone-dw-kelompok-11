@@ -26,7 +26,11 @@ Kasus 11 menganalisis indikator Tingkat Pengangguran Terbuka (SDG 8.5.2) pada se
 *(Draf — dilengkapi pada Sprint 2 bersama komponen Integrasi)*
 
 ## Validasi dan reproduksibilitas
-*(Draf — dilengkapi pada Sprint 2–3 bersama komponen Validasi)*
+*(Catatan Sprint 1 — dilengkapi kembali pada Sprint 2–3 setelah lapisan Gold selesai)*
+
+- **Validasi Dasar Silver (`src/validasi/__init__.py`):** Telah diimplementasikan dan dijalankan terhadap `data/silver/silver.parquet` (7.495 baris, 4 seri, 39 wilayah) dengan hasil **5/5 aturan lolos** (kelengkapan 11 kolom wajib, rentang nilai `0–100`, kesesuaian format `periode` dengan `jenis_periode`, keunikan kunci komposit, dan konsistensi satuan `persen` per seri). Hasil metrik tersimpan di `results/124450012/metrics.json`.
+- **Dokumentasi & Penelusuran Lineage (`docs/data-dictionary.md`):** Seluruh 11 kolom wajib tabel Silver telah didokumentasikan (nama, tipe data, satuan, arti, dan asal data), dilengkapi contoh verifikasi penelusuran satu baris aktual Silver hingga ke berkas mentahnya melalui `_berkas_raw` dan kecocokan sidik SHA-256 (`_sha256_raw`).
+- **Rencana Sprint 2–3:** Menambahkan aturan validasi lapisan Gold (termasuk pencegahan tumpang tindih kelompok umur ILO dalam satu penjumlahan) serta melengkapi tabel kamus kolom Gold pada `docs/data-dictionary.md`.
 
 ## Pembagian kerja
 | Anggota | NIM | Komponen | Tugas sampingan | Bagian laporan yang ditulis |
