@@ -2,7 +2,10 @@
   "metrik": {
     "baris_silver": 1939,
     "sel_kosong_grid": 379,
-    "outlier_ditandai": 77
+    "outlier_ditandai": 77,
+    "baris_indonesia": 61,
+    "sel_struktural": 378,
+    "sel_missing_aktual": 1
   },
   "seed": 0,
   "data_hash": "56ae001b3cc5d23542383f99e52b63b5c5ad78d379edb030a09adcf4ca3bbb76",
