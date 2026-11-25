@@ -1,6 +1,7 @@
 ﻿"""Pembentukan panel Gold provinsi x periode x indikator dari Silver (Tahap 4, Kartu #26)."""
 from pathlib import Path
-import pandas as pd
+import pandas as pd 
+from src.gold.pilih import ATURAN, pilih_satu_nilai
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_GOLD_DIR = ROOT / "data" / "gold"
@@ -14,37 +15,21 @@ PETA_PERIODE_PROFIL = {
 
 
 def pilih_sel_gold(silver: pd.DataFrame) -> tuple[pd.DataFrame, int]:
-    """Terapkan aturan satu nilai per sel Gold untuk seri utama var543 level provinsi.
+    """Aturan satu nilai per sel Gold; aturan lengkap ada di src/gold/pilih.py (ATURAN).
 
-    Aturan:
-    1. Hanya seri utama 'var543' tingkat provinsi (wilayah_kode != 9999).
-    2. Sumber kanonik tunggal 'bps/2026-10-17/sdg8_tpt.csv'.
-    3. Rincian 'total' dan satuan standar 'persen'.
-    4. Mempertahankan granularitas periode asli (YYYY, YYYY-02, YYYY-08) tanpa agregasi.
+    Mengembalikan baris Silver terpilih (kolom dan urutan Silver tetap) dan jumlah baris yang tidak terpilih.
     """
-    mask = (
-        (silver["seri_kode"] == "var543")
-        & (silver["wilayah_kode"] != 9999)
-        & (silver["rincian"] == "total")
-        & (silver["satuan"] == "persen")
-    )
-    terpilih = silver.loc[mask].copy()
-    jumlah_tidak_terpilih = int(len(silver) - len(terpilih))
-
+    terpilih, tidak, _ = pilih_satu_nilai(silver, ATURAN)
     if terpilih.empty:
         raise ValueError("Tidak ada baris var543 level provinsi yang lolos aturan pemilihan Gold.")
-
-    duplikat = terpilih.duplicated(subset=["wilayah_kode", "periode", "seri_kode", "rincian"]).sum()
-    if duplikat > 0:
-        raise ValueError(f"Ditemukan {duplikat} sel ganda sebelum pivot Gold pada var543.")
-
-    return terpilih, jumlah_tidak_terpilih
+    asli = silver.iloc[sorted(terpilih["_posisi_silver"].tolist())].copy()
+    return asli, int(len(tidak))
 
 
 def _muat_penanda_anomali(path_anomali: Path = PROFIL_ANOMALI_PATH) -> pd.DataFrame:
     """Baca penanda outlier/patahan dari hasil profil Sprint 1 untuk diteruskan ke Gold."""
     if not path_anomali.exists():
-        return pd.DataFrame(columns=["wilayah_kode", "periode", "status_anomali"])
+        raise FileNotFoundError(f"Penanda anomali tidak ditemukan: {path_anomali}. Gold tidak boleh diam-diam memakai 'normal'.")
 
     df_anom = pd.read_csv(path_anomali)
     periode_fmt = [
