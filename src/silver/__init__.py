@@ -58,23 +58,29 @@ def _proses_bps(mentah: pd.DataFrame, manifest: dict) -> pd.DataFrame:
 
 
 def _proses_wdi(mentah: pd.DataFrame, manifest: dict) -> pd.DataFrame:
-    if "sumber" not in mentah.columns:
+    seri_wdi = ("SL.UEM.TOTL.ZS", "SL.UEM.TOTL.NE.ZS")
+    if "indicator_id" in mentah.columns:
+        df = mentah[mentah["indicator_id"].isin(seri_wdi)].copy()
+        kode_col, per_col, val_col = "indicator_id", "date", "value"
+    elif "sumber" in mentah.columns:
+        df = mentah[mentah["sumber"] == "wdi"].copy()
+        kode_col, per_col, val_col = "seri_kode", "periode", "nilai"
+    else:
         return pd.DataFrame(columns=KOLOM_SILVER)
 
-    df = mentah[mentah["sumber"] == "wdi"].copy()
     if df.empty:
         return pd.DataFrame(columns=KOLOM_SILVER)
 
     berkas_clean = df["_berkas_raw"].map(_bersihkan_path_raw)
     out = pd.DataFrame({
         "sumber": "wdi",
-        "seri_kode": df["seri_kode"].astype(str).str.strip(),
+        "seri_kode": df[kode_col].astype(str).str.strip(),
         "wilayah_kode": pd.Series(9999, index=df.index, dtype="int64"),
         "nama_wilayah": "INDONESIA",
-        "periode": df["periode"].astype(str).str.strip(),
+        "periode": df[per_col].astype(str).str.strip(),
         "jenis_periode": "tahun",
         "rincian": "total",
-        "nilai": pd.to_numeric(df["nilai"], errors="coerce"),
+        "nilai": pd.to_numeric(df[val_col], errors="coerce"),
         "satuan": "persen",
         "_berkas_raw": berkas_clean,
         "_sha256_raw": berkas_clean.map(manifest),
