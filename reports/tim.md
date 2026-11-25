@@ -4,7 +4,7 @@ Satu dokumen bersama, enam bagian. Angka harus dapat ditarik ulang dari `data/si
 dan `log-keputusan.csv` yang sudah di-*commit*.
 
 ## Ringkasan
-Kasus 11 menganalisis indikator Tingkat Pengangguran Terbuka (SDG 8.5.2) pada seri utama BPS (`var543`, 38 provinsi dan nasional, 1986–2026-02) serta 5 seri pembanding nasional dari WDI dan ILOSTAT (`SL.UEM.TOTL.ZS`, `SL.UEM.TOTL.NE.ZS`, `SDG_0852_SEX_AGE_RT`, `SDG_0852_SEX_DSB_RT`, `UNE_DEAP_SEX_AGE_RT`). Seluruh 14 berkas mentah tervalidasi SHA-256 dan diseragamkan menjadi 7.495 baris observasi valid pada lapisan Silver (`data/silver/silver.parquet`).
+Kasus 11 menganalisis indikator Tingkat Pengangguran Terbuka (SDG 8.5.2) pada seri utama BPS (`var543`, 38 provinsi dan nasional, 1986–2026-02) serta 5 seri pembanding nasional dari WDI dan ILOSTAT (`SL.UEM.TOTL.ZS`, `SL.UEM.TOTL.NE.ZS`, `SDG_0852_SEX_AGE_RT`, `SDG_0852_SEX_DSB_RT`, `UNE_DEAP_SEX_AGE_RT`). Seluruh 14 berkas mentah tervalidasi SHA-256 dan diseragamkan menjadi 7.572 baris observasi valid pada lapisan Silver (`data/silver/silver.parquet`).
 
 ## Data dan lineage
 *(Draf — dilengkapi pada Sprint 2–3 bersama komponen Ekstraksi)*
@@ -23,7 +23,7 @@ Kasus 11 menganalisis indikator Tingkat Pengangguran Terbuka (SDG 8.5.2) pada se
 *Catatan deteksi anomali (`reports/profil/daftar_calon_anomali.csv`): ditemukan 79 calon anomali pada `var543` berdasarkan metode IQR dan Z-score (ditandai pada tahap profil tanpa mengubah nilai mentah, untuk diklasifikasikan lebih lanjut pada tahap pembersihan dan rekonsiliasi).*
 
 ## Integrasi dan rekonsiliasi
-*(Draf — Kartu #33, disusun dari `data/silver/silver.parquet` [7.495 baris], `data/gold/panel.parquet` [1.939 baris, 38 provinsi], dan berkas mentah terverifikasi SHA-256)*
+*(Draf — Kartu #33, disusun dari `data/silver/silver.parquet` [7.572 baris], `data/gold/panel.parquet` [1.939 baris, 38 provinsi], dan berkas mentah terverifikasi SHA-256)*
 
 ### 1. Skema Integrasi Lapisan Gold dan Kunci Penggabungan
 Integrasi pada lapisan Gold memisahkan secara ketat dua tingkat granularitas agar tidak terjadi agregasi ganda maupun percampuran unit analisis:
@@ -54,7 +54,7 @@ Pada tahap penyimpanan, kami memilih menyimpan data ke dalam basis data SQL (SQL
 ## Validasi dan reproduksibilitas
 *(Catatan Sprint 1 — dilengkapi kembali pada Sprint 2–3 setelah lapisan Gold selesai)*
 
-- **Validasi Dasar Silver (`src/validasi/__init__.py`):** Telah diimplementasikan dan dijalankan terhadap `data/silver/silver.parquet` (7.495 baris, 4 seri, 39 wilayah) dengan hasil **5/5 aturan lolos** (kelengkapan 11 kolom wajib, rentang nilai `0–100`, kesesuaian format `periode` dengan `jenis_periode`, keunikan kunci komposit, dan konsistensi satuan `persen` per seri). Hasil metrik tersimpan di `results/124450012/metrics.json`.
+- **Validasi Dasar Silver (`src/validasi/__init__.py`):** Telah diimplementasikan dan dijalankan terhadap `data/silver/silver.parquet` (7.572 baris, 6 seri, 39 wilayah) dengan hasil **5/5 aturan lolos** (kelengkapan 11 kolom wajib, rentang nilai `0–100`, kesesuaian format `periode` dengan `jenis_periode`, keunikan kunci komposit, dan konsistensi satuan `persen` per seri). Hasil metrik tersimpan di `results/124450012/metrics.json`.
 - **Dokumentasi & Penelusuran Lineage (`docs/data-dictionary.md`):** Seluruh 11 kolom wajib tabel Silver telah didokumentasikan (nama, tipe data, satuan, arti, dan asal data), dilengkapi contoh verifikasi penelusuran satu baris aktual Silver hingga ke berkas mentahnya melalui `_berkas_raw` dan kecocokan sidik SHA-256 (`_sha256_raw`).
 - **Rencana Sprint 2–3:** Menambahkan aturan validasi lapisan Gold (termasuk pencegahan tumpang tindih kelompok umur ILO dalam satu penjumlahan) serta melengkapi tabel kamus kolom Gold pada `docs/data-dictionary.md`.
 
