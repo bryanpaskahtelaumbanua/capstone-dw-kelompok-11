@@ -23,7 +23,18 @@ Kasus 11 menganalisis indikator Tingkat Pengangguran Terbuka (SDG 8.5.2) pada se
 *Catatan deteksi anomali (`reports/profil/daftar_calon_anomali.csv`): ditemukan 79 calon anomali pada `var543` berdasarkan metode IQR dan Z-score (ditandai pada tahap profil tanpa mengubah nilai mentah, untuk diklasifikasikan lebih lanjut pada tahap pembersihan dan rekonsiliasi).*
 
 ## Integrasi dan rekonsiliasi
-*(Draf — dilengkapi pada Sprint 2 bersama komponen Integrasi)*
+Proses integrasi pada proyek ini bertujuan untuk membandingkan angka Tingkat Pengangguran Terbuka dari seri utama BPS dengan pembanding nasional dari WDI dan ILO. Tabel rekonsiliasi dibentuk dengan mengambil baris Indonesia (wilayah_kode `9999`), kemudian menyandingkannya dengan seri WDI (`SL.UEM.TOTL.ZS`, `SL.UEM.TOTL.NE.ZS`) dan ILO (`SDG_0852_SEX_AGE_RT`).
+
+Dari hasil penggabungan, ditemukan **5 periode beririsan** di mana keempat seri memiliki nilai yang dapat dibandingkan. Perbedaan nilai (selisih) antar seri tidak dihapus, melainkan dikategorikan ke dalam penjelasan metodologis, seperti:
+- **Metode berbeda:** WDI `SL.UEM.TOTL.ZS` adalah estimasi model ILO, sedangkan `SL.UEM.TOTL.NE.ZS` adalah estimasi nasional.
+- **Definisi/cakupan berbeda:** BPS menggunakan survei periode tertentu (Februari/Agustus), sedangkan ILO dan WDI mencakup rata-rata tahunan.
+- **Belum terjelaskan:** Selisih yang masih ada setelah mempertimbangkan faktor di atas.
+
+### Alasan Pemilihan Basis Data (JSON vs SQL)
+Pada tahap penyimpanan, kami memilih menyimpan data ke dalam basis data SQL (SQLite untuk lapis Silver, DuckDB untuk lapis Gold) dengan alasan sebagai berikut:
+1. **Integritas Data:** SQL memungkinkan penerapan kunci primer (primary key) yang mencegah duplikasi data secara otomatis, dan validasi tipe data (tipe kolom yang jelas).
+2. **Performa Analitik:** Untuk keperluan agregasi panel dan rekonsiliasi, DuckDB (yang bersifat kolumnar) mengeksekusi query jauh lebih cepat dibandingkan membaca file Parquet atau JSON secara langsung.
+3. **Perbandingan dengan JSON Mentah:** Menyimpan respons JSON mentah di folder `data/raw/` (lapis Bronze) sangat penting untuk arsip agar struktur asli dari sumber (BPS, WDI, ILO) tetap utuh. Namun, JSON mentah sangat tidak efisien untuk analisis karena tidak memiliki skema yang kaku dan query-nya akan sangat lambat. Oleh karena itu, JSON disimpan sebagai arsip, sementara analisis dilakukan pada SQL.
 
 ## Validasi dan reproduksibilitas
 *(Draf — dilengkapi pada Sprint 2–3 bersama komponen Validasi)*
