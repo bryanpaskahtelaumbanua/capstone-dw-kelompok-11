@@ -5,6 +5,9 @@ rekonsiliasi dengan pembanding nasional) dan basis data SQL (mis. data/gold/gold
 """
 
 
+from src.gold.nasional import bangun_tabel_nasional
+
 def jalankan(silver):
-    """Terima Silver, tulis tabel Gold, kembalikan {nama_tabel: DataFrame}."""
-    raise NotImplementedError("Tahap 4–6: grid lengkap, reshape panel, rekonsiliasi pembanding, simpan ke SQL")
+    nasional = bangun_tabel_nasional(silver)
+    # bagian Gold lain (panel lebar, SQL) tetap dikerjakan komponen masing-masing
+    return {"nasional": nasional}
